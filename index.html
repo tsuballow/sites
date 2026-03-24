@@ -167,14 +167,16 @@
 
     .slide-stage {
       position: absolute;
-      left: clamp(18px, 4vw, 34px);
-      right: 12px;
+      left: calc(clamp(10px, 2vw, 18px) + var(--pipe-width) - 18px);
+      right: 14px;
       top: 50%;
       height: clamp(40px, 6vw, 50px);
       transform: translateY(-50%);
       overflow: hidden;
       z-index: 1;
       pointer-events: none;
+      mask-image: linear-gradient(90deg, transparent 0, black 26px, black 100%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, black 26px, black 100%);
     }
 
     .slide-track {
@@ -185,10 +187,12 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      transform: translateX(var(--slide-shift-closed));
-      transition: transform 700ms cubic-bezier(.22,.8,.22,1);
+      transform: translateX(-42px) scaleX(0.92);
+      transform-origin: left center;
+      transition: transform 760ms cubic-bezier(.22,.8,.22,1), opacity 420ms ease;
       will-change: transform;
       max-width: 100%;
+      opacity: 0;
     }
 
     .future-illustration {
@@ -197,16 +201,16 @@
       border-radius: 12px;
       flex: 0 0 auto;
       background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), transparent 30%),
-        linear-gradient(135deg, rgba(255, 241, 163, 0.95), rgba(255, 196, 61, 0.88));
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.38), transparent 30%),
+        linear-gradient(135deg, rgba(255, 244, 190, 0.98), rgba(255, 196, 61, 0.84));
       border: 1px solid rgba(255,255,255,0.14);
       box-shadow:
         0 0 18px rgba(255, 214, 87, 0.16),
         inset 0 0 0 1px rgba(255,255,255,0.05);
       position: relative;
       opacity: 0;
-      transform: translateX(-10px) scale(0.92);
-      transition: opacity 420ms ease, transform 700ms cubic-bezier(.22,.8,.22,1);
+      transform: translateX(-12px) scale(0.86) rotate(-8deg);
+      transition: opacity 420ms ease, transform 760ms cubic-bezier(.22,.8,.22,1);
     }
 
     .future-illustration::before {
@@ -226,18 +230,21 @@
       align-items: center;
       justify-content: center;
       border-radius: 999px;
-      background: linear-gradient(180deg, rgba(255, 244, 190, 0.16), rgba(255, 248, 220, 0.08));
-      border: 1px solid rgba(255, 244, 190, 0.12);
+      background: linear-gradient(180deg, rgba(255, 248, 220, 0.14), rgba(255, 248, 220, 0.04));
+      border: 1px solid rgba(255, 244, 190, 0.1);
       box-shadow:
-        0 6px 18px rgba(0,0,0,0.14),
+        0 6px 18px rgba(0,0,0,0.12),
         inset 0 0 0 1px rgba(255,255,255,0.02);
-      font-size: clamp(0.76rem, 1.2vw, 0.92rem);
+      font-size: clamp(0.74rem, 1.1vw, 0.88rem);
       font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--text);
-      text-shadow: 0 0 10px rgba(255, 222, 89, 0.14);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 250, 238, 0.94);
+      text-shadow: 0 0 10px rgba(255, 222, 89, 0.12);
       white-space: nowrap;
       flex: 0 0 auto;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .pipe-trigger[aria-expanded="true"] .pipe-label {
@@ -246,12 +253,13 @@
     }
 
     .pipe-trigger[aria-expanded="true"] .slide-track {
-      transform: translateX(var(--slide-shift-open));
+      transform: translateX(0) scaleX(1);
+      opacity: 1;
     }
 
     .pipe-trigger[aria-expanded="true"] .future-illustration {
       opacity: 1;
-      transform: translateX(0) scale(1);
+      transform: translateX(0) scale(1) rotate(0deg);
     }
 
     main {
@@ -419,8 +427,6 @@
         height: 54px;
         --pipe-width: 154px;
         --pipe-height: 42px;
-        --slide-shift-closed: -118px;
-        --slide-shift-open: -2px;
       }
 
       .pipe-viewport {
@@ -434,13 +440,16 @@
       }
 
       .slide-stage {
-        left: 10px;
+        left: 136px;
         right: 8px;
         height: 38px;
+        mask-image: linear-gradient(90deg, transparent 0, black 18px, black 100%);
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, black 18px, black 100%);
       }
 
       .slide-track {
         gap: 8px;
+        transform: translateX(-32px) scaleX(0.94);
       }
 
       .future-illustration {
@@ -454,9 +463,9 @@
       }
 
       .slide-text {
-        padding: 0 11px;
-        font-size: 0.76rem;
-        letter-spacing: 0.06em;
+        padding: 0 10px;
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
       }
 
       main {
@@ -515,7 +524,7 @@
 </head>
 <body>
   <header class="site-header">
-    <!-- <nav class="menu-bar" aria-label="menu">
+    <nav class="menu-bar" aria-label="menu">
       <button class="pipe-trigger" id="pipeTrigger" aria-expanded="false" aria-label="poriri.com menu">
         <span class="pipe-shell"></span>
         <span class="pipe-viewport">
@@ -527,13 +536,19 @@
             <span class="future-illustration"></span>
             <span class="slide-text">poriri.com</span>
             <span class="slide-text">about</span>
+            <span class="slide-text">archive</span>
+            <span class="slide-text">studio</span>
+            <span class="slide-text">contact</span>
+          </span>
+            <span class="slide-text">poriri.com</span>
+            <span class="slide-text">about</span>
             <span class="slide-text">gallery</span>
             <span class="slide-text">works</span>
             <span class="slide-text">contact</span>
           </span>
         </span>
       </button>
-    </nav> -->
+    </nav>
   </header>
 
   <main>
