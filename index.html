@@ -174,7 +174,7 @@
       transform: translateY(-50%);
       overflow: hidden;
       z-index: 1;
-      pointer-events: none;
+      pointer-events: auto;
       mask-image: linear-gradient(90deg, transparent 0, black 26px, black 100%);
       -webkit-mask-image: linear-gradient(90deg, transparent 0, black 26px, black 100%);
     }
@@ -193,6 +193,10 @@
       will-change: transform;
       max-width: 100%;
       opacity: 0;
+    }
+
+    .menu-link {
+      text-decoration: none;
     }
 
     .future-illustration {
@@ -255,6 +259,10 @@
     .pipe-trigger[aria-expanded="true"] .slide-track {
       transform: translateX(0) scaleX(1);
       opacity: 1;
+    }
+
+    .pipe-trigger[aria-expanded="true"] .slide-stage {
+      pointer-events: auto;
     }
 
     .pipe-trigger[aria-expanded="true"] .future-illustration {
@@ -525,26 +533,20 @@
 <body>
   <header class="site-header">
     <nav class="menu-bar" aria-label="menu">
-      <button class="pipe-trigger" id="pipeTrigger" aria-expanded="false" aria-label="poriri.com menu">
+      <button class="pipe-trigger" id="pipeTrigger" aria-expanded="false" aria-controls="menuTrack" aria-label="poriri.com menu">
         <span class="pipe-shell"></span>
         <span class="pipe-viewport">
           <img class="pipe" src="./dokan.png" alt="" />
           <span class="pipe-label">poriri.com</span>
         </span>
-        <span class="slide-stage" aria-hidden="true">
-          <span class="slide-track">
+        <span class="slide-stage">
+          <span class="slide-track" id="menuTrack">
             <span class="future-illustration"></span>
-            <span class="slide-text">poriri.com</span>
-            <span class="slide-text">about</span>
-            <span class="slide-text">archive</span>
-            <span class="slide-text">studio</span>
-            <span class="slide-text">contact</span>
-          </span>
-            <span class="slide-text">poriri.com</span>
-            <span class="slide-text">about</span>
-            <span class="slide-text">gallery</span>
-            <span class="slide-text">works</span>
-            <span class="slide-text">contact</span>
+            <a class="slide-text menu-link" href="#top">poriri.com</a>
+            <a class="slide-text menu-link" href="#about">about</a>
+            <a class="slide-text menu-link" href="#archive">archive</a>
+            <a class="slide-text menu-link" href="#studio">studio</a>
+            <a class="slide-text menu-link" href="#contact">contact</a>
           </span>
         </span>
       </button>
@@ -560,10 +562,31 @@
 
   <script>
     const trigger = document.getElementById('pipeTrigger');
+    const menuTrack = document.getElementById('menuTrack');
+
+    const closeMenu = () => trigger.setAttribute('aria-expanded', 'false');
 
     trigger.addEventListener('click', () => {
       const expanded = trigger.getAttribute('aria-expanded') === 'true';
       trigger.setAttribute('aria-expanded', String(!expanded));
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!trigger.contains(event.target)) {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeMenu();
+      }
+    });
+
+    menuTrack.addEventListener('click', (event) => {
+      if (event.target.matches('.menu-link')) {
+        closeMenu();
+      }
     });
   </script>
 </body>
